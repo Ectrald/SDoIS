@@ -1,4 +1,4 @@
-#include "Header.h";
+#include "Set.h";
 
 int main()
 {
@@ -67,7 +67,7 @@ MENU:
 		}
 		else exit(0);
 	case(3):
-		std::cout << "Мощность первого множества: " << set1.amount_of_elements();
+		std::cout << "Мощность первого множества: " << set1.Amount_of_elements();
 		std::cout << "" << std::endl;
 		std::cout << "Желаете продолжить?\n 1 - да \n 2 - нет" << std::endl;
 		std::cin >> index_for_user_accept;
@@ -77,7 +77,7 @@ MENU:
 		}
 		else exit(0);
 	case(4):
-		std::cout << "Мощность второго множества: " << set2.amount_of_elements();
+		std::cout << "Мощность второго множества: " << set2.Amount_of_elements();
 		std::cout << "" << std::endl;
 		std::cout << "Желаете продолжить?\n 1 - да \n 2 - нет" << std::endl;
 		std::cin >> index_for_user_accept;
@@ -213,7 +213,7 @@ MENU:
 		else exit(0);
 	}
 	case(15):
-		set1.set_boolean();
+		set1.Set_boolean();
 		std::cout << "" << std::endl;
 		std::cout << "Желаете продолжить?\n 1 - да \n 2 - нет" << std::endl;
 		std::cin >> index_for_user_accept;
@@ -223,7 +223,7 @@ MENU:
 		}
 		else exit(0);
 	case(16):
-		set2.set_boolean();
+		set2.Set_boolean();
 		std::cout << "" << std::endl;
 		std::cout << "Желаете продолжить?\n 1 - да \n 2 - нет" << std::endl;
 		std::cin >> index_for_user_accept;
@@ -236,8 +236,6 @@ MENU:
 		std::cout << "Неверно введённое значение, повторите ввод";
 		goto MENU;
 	}
-
-
 }
 //{a, b, c, {a, b}, {}, {a, {c}}}
 //{a, {b,a}, {}, {a, {c}}}

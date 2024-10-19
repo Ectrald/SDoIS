@@ -1,23 +1,5 @@
-#include "Header.h";
+#include "Set.h";
 
-bool checkString(std::string str) // проверка на правильность введённой строки
-{
-	if (str == "{}") {
-		std::cout << "Пустое множество";
-		return false;
-	}
-	if (str.find(",,") != -1) return false;
-	if (str.find("}{") != -1) return false;
-	int openArr = 0;
-	int openCourt = 0;
-	for (int i = 0; i < str.length(); i++)
-	{
-		if (str[i] == '{') openArr++;
-		if (str[i] == '}') openArr--;
-	}
-	if (openArr != 0 || openCourt != 0) return false;
-	return true;
-}
 void Set::Create_subset_el(std::string str) {
 	Subset exmpl(str);
 	this->Elements_sub.push_back(exmpl);
@@ -36,90 +18,6 @@ bool Set::Compare_el(std::string str) {
 	}
 	return false;
 }
-
-std::string normalizeSubSet(std::string subset) {
-	auto elements = parseElements(subset);
-	for (std::string& element : elements) {
-		element = normalizeSingleElement(element);
-	}
-	std::sort(elements.begin(), elements.end());
-
-
-	return "{" + join(elements) + "}";
-}
-std::string normalizeSingleElement(std::string element) {
-	if (element.front() == '{' && element.back() == '}') {
-		return normalizeSubSet(element);
-	}
-	return element;
-}
-std::vector<std::string> parseElements(std::string subset) {
-	std::vector<std::string> elements;
-	std::vector<std::string> unique_elements;
-	int bracket_count = 0;
-	std::string current_element;
-
-	for (size_t i = 0; i < subset.size(); ++i) {
-		char c = subset[i];
-
-		if (c == '{') {
-			if (bracket_count > 0) {
-				current_element += c;
-			}
-			bracket_count++;
-		}
-		else if (c == '}') {
-			bracket_count--;
-			if (bracket_count > 0) {
-				current_element += c;
-			}
-		}
-		else if (c == ',' && bracket_count == 1) {
-			std::string element = current_element;
-			if (!element.empty()) {
-
-				if (std::find(unique_elements.begin(), unique_elements.end(), element) != unique_elements.end()) {
-					std::cerr << "Ошибка: Дубликат элемента \"" << element << "\" в множестве." << std::endl;
-				}
-				else {
-					unique_elements.push_back(element);
-					elements.push_back(element);
-				}
-			}
-			current_element.clear();
-		}
-		else {
-			current_element += c;
-		}
-	}
-
-	if (!current_element.empty()) {
-		std::string element = current_element;
-		if (!element.empty()) {
-
-			if (std::find(unique_elements.begin(), unique_elements.end(), element) != unique_elements.end()) {
-				std::cerr << "Ошибка: Дубликат элемента \"" << element << "\" в множестве." << std::endl;
-			}
-			else {
-				unique_elements.push_back(element);
-				elements.push_back(element);
-			}
-		}
-	}
-
-	return elements;
-}
-std::string join(const std::vector<std::string>& elements) {
-	std::string result;
-	for (const auto& elem : elements) {
-		if (!result.empty()) {
-			result += ",";
-		}
-		result += elem;
-	}
-	return result;
-}
-//
 bool Set::Compare_subset(std::string str) {
 	for (size_t i = 0; i < this->Elements_sub.size(); i++) {
 		if (str == this->Elements_sub[i].line()) {
@@ -158,8 +56,8 @@ Set::Set(std::string str) {
 		}
 		if (str[i] != '{' && str[i] != ',' && str[i] != '}' && i < str.size()) {
 			start = i;
-			i++;
-			for (; str[i] != ','; i++ && distance++) {}
+			if(i < str.size()) i++;
+			for (; str[i] != ',' && i < str.size(); i++ && distance++) {}
 			boot = str.substr(start, distance);
 			if (this->Compare_el(boot)) {
 				std::cout << "В множестве недопустимы одинаковые элементы";
@@ -169,11 +67,8 @@ Set::Set(std::string str) {
 				this->Create_el(boot);
 				distance = 1;
 			}
-
 		}
-
 	}
-
 }
 void Set::Output() {
 	std::cout << "{";
@@ -235,10 +130,10 @@ void Set::Delete_elem() {
 	std::cout << "Множество после изменений: ";
 	this->Output();
 }
-size_t Set::amount_of_elements() {
+size_t Set::Amount_of_elements() {
 	return this->Elements_sub.size() + this->Elements_el.size();
 }
-std::vector<std::string> Set::vec_of_full_elements() {
+std::vector<std::string> Set::Vec_of_full_elements() {
 	std::vector<std::string> boot;
 	for (size_t i = 0; i < this->Elements_el.size(); i++) {
 		boot.push_back(this->Elements_el[i].line());
@@ -248,7 +143,7 @@ std::vector<std::string> Set::vec_of_full_elements() {
 	}
 	return boot;
 }
-void Set::set_boolean(std::vector<std::string> boot, std::vector<std::string> result, size_t start) {
+void Set::Set_boolean(std::vector<std::string> boot, std::vector<std::string> result, size_t start) {
 	if (!result.empty()) {
 		for (const auto& str : result) {
 			std::cout << str << " ";
@@ -258,7 +153,7 @@ void Set::set_boolean(std::vector<std::string> boot, std::vector<std::string> re
 
 	for (size_t i = start; i < boot.size(); ++i) {
 		result.push_back(boot[i]);
-		this->set_boolean(boot, result, i + 1);
+		this->Set_boolean(boot, result, i + 1);
 		result.pop_back();
 	}
 }
